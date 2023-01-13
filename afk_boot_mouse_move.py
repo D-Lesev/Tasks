@@ -12,6 +12,7 @@ import random
 import time
 from pynput import keyboard
 import threading
+# from pynput.mouse import Button, Controller
 
 
 def move_mouse():
@@ -23,6 +24,8 @@ def move_mouse():
     """
 
     global cond
+    
+#     mouse = Controller()
 
     while cond:
         x = random.randint(300, 600)
@@ -30,6 +33,8 @@ def move_mouse():
 
         pyautogui.moveTo(x=x, y=y, duration=0.8)
         pyautogui.click(x=x, y=y)
+#         mouse.press(Button.left)
+#         mouse.release(Button.left)
         time.sleep(3)
 
 
