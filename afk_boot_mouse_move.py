@@ -29,6 +29,7 @@ def move_mouse():
         y = random.randint(200, 700)
 
         pyautogui.moveTo(x=x, y=y, duration=0.8)
+        pyautogui.click(x=x, y=y)
         time.sleep(3)
 
 
