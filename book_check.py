@@ -37,7 +37,16 @@ def create_book(author, book_name, read=False):
     try:
         with open(_CURRENT_DB, "r") as f:
             cont = json.load(f)
-            return cont
+
+            for authors in cont.keys():
+                if author in authors:
+                    if book_name in cont[author].keys():
+                        print("Your book is already in")
+                    else:
+                        cont[author][book_name] = read
+
+            with open(_CURRENT_DB, "w") as f:
+                json.dump(cont, f)
     except json.JSONDecodeError:
         with open(_CURRENT_DB, "w") as f:
             json.dump(current_db, f)
