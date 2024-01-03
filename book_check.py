@@ -4,46 +4,20 @@ import os
 _CURRENT_DB = ""
 
 
-# {avtor: { {kniga_ime: xyz, chetena: tr/fals}
-#           {kniga_ime: xyz2, chetna: tr}}
-#  avtor2: ............... }
-
-# TODO: Създаване
-#       Изтриване
-#       Редактиране
-#       Търсене -> Автор / Име на книга
-
-# def load_current_db(db_filename):
-#     content = {}
-#     try:
-#         with open(db_filename, "r") as file:
-#             file_content = file.read()
-#             if file_content:
-#                 content = json.loads(file_content)
-#             else:
-#                 print(f"Error: File {db_filename} is empty.")
-#     except FileNotFoundError:
-#         print(f"Error: File {db_filename} not found. Make sure the file exists.")
-#     except json.JSONDecodeError:
-#         print(f"Error: Unable to decode JSON in file {db_filename}. Make sure the file contains valid JSON data.")
-#     return content
-
-
 def create_book(author, book_name, read=False):
     current_db = {author: {book_name: read}}
-
-    print(current_db)
 
     try:
         with open(_CURRENT_DB, "r") as f:
             cont = json.load(f)
 
-            for authors in cont.keys():
-                if author in authors:
-                    if book_name in cont[author].keys():
-                        print("Your book is already in")
-                    else:
-                        cont[author][book_name] = read
+            if author in cont.keys():
+                if book_name in cont[author].keys():
+                    print("Your book is already in")
+                else:
+                    cont[author][book_name] = read
+            else:
+                cont[author] = {book_name: read}
 
             with open(_CURRENT_DB, "w") as f:
                 json.dump(cont, f)
@@ -75,7 +49,7 @@ def create_home_lib():
             print("You have already created a home library\n[!] Entering this DB.")
             break
 
-    if _CURRENT_DB is None:
+    if _CURRENT_DB == "":
         name_of_home_lib = input("Enter your home DB:\n")
 
         with open(f"{name_of_home_lib}.json", "w") as file:
@@ -89,21 +63,57 @@ def reading_the_db():
 
 
 def main():
-    print("Hello! Welcome to Home Library\nYou can safe your books here.")
-    print()
+    print("Hello! Welcome to Home Library\nYou can safe your books here.\n")
     create_home_lib()
-    print()
-    print("Please enter number of what you want:\n")
-    print("1. Create book")
-    print("2. Edit book")
-    print("3. Delete book")
-    print("4. Search book")
-    valid_choice = input(">>>\n")
+    print("\nPlease enter number of what you want:\n")
+    print("1. Create book\n"
+          "2. Edit book\n"
+          "3. Delete book\n"
+          "4. Search book\n"
+          "5. Print current library")
+    valid_choice = input(">>>\t")
 
     if valid_choice == "1":
-        author_name = input("Enter the name of the author:\n")
-        book_name = input("Enter the name of the book:\n")
-        create_book(author_name, book_name)
+        stop = False
+        while not stop:
+            author_name = input("Enter the name of the author:\n")
+            book_name = input("Enter the name of the book:\n")
+            create_book(author_name, book_name)
+
+            print("Do you want to add more books? (Yes || No)\n")
+            flag = input(">>\t").lower()
+
+            if flag == "no":
+                stop = True
+
+    elif valid_choice == "2":
+        # TODO: 1. Search book by book name
+        #           - if we have the same book name -> show all possible authors
+        #       2. To choose with numbers
+        #       3. After choosing the item we need to choose what to edit -> for now only if it was read (Yes/No)
+        #       4. Write the new status to the current book
+        ...
+
+    elif valid_choice == "3":
+        # TODO: 1. Search book by book name
+        #       2. Delete the the book which we choose
+        ...
+
+    elif valid_choice == "4":
+        # TODO: 1. Search book by book name
+        #       2. Show if we have the searched book
+        #       3. If not, ask for new search or no
+        ...
+
+    elif valid_choice == "5":
+        # TODO: 1. Print each author with it's book and if this book was read
+        #       2. Make something like a table with Author, Book Name and if the book is read (YES/NO)
+        #       3. If all of the above is working, make sure that we can print all books sorted by name of author
+        #       and for each author the books are also sorted by name
+        ...
+
+    else:
+        ...
 
 
 def test_f():
