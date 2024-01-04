@@ -31,11 +31,23 @@ def edit_book(book_name):
 
 
 def delete_book(book_name):
-    ...
+    with open(_CURRENT_DB, "r") as f:
+        cont = json.load(f)
 
 
 def search_book(book_name):
-    ...
+    with open(_CURRENT_DB, "r") as f:
+        content = json.load(f)
+
+    found_book = False
+    for books in content.values():
+        for book in books:
+            if book_name == book.lower():
+                found_book = True
+                break
+        if found_book:
+            break
+    print("[-] You don't have this book") if not found_book else print("[+] You found your book!")
 
 
 def create_home_lib():
@@ -81,9 +93,9 @@ def main():
             create_book(author_name, book_name)
 
             print("Do you want to add more books? (Yes || No)\n")
-            flag = input(">>\t").lower()
+            response = input(">>\t").lower()
 
-            if flag == "no":
+            if response == "no":
                 stop = True
 
     elif valid_choice == "2":
@@ -97,13 +109,28 @@ def main():
     elif valid_choice == "3":
         # TODO: 1. Search book by book name
         #       2. Delete the the book which we choose
-        ...
+        stop = False
+        while not stop:
+            searched_book = input("What book do you want to delete:\t").lower()
+            delete_book(searched_book)
+
+            print("Do you want to delete more books? (Yes || No)\n")
+            response = input(">>\t").lower()
+
+            if response == "no":
+                stop = True
 
     elif valid_choice == "4":
-        # TODO: 1. Search book by book name
-        #       2. Show if we have the searched book
-        #       3. If not, ask for new search or no
-        ...
+        stop = False
+        while not stop:
+            searched_book = input("What book are you looking for:\t").lower()
+            search_book(searched_book)
+
+            print("Do you want to search for another book? (Yes || No)\n")
+            response = input(">>\t").lower()
+
+            if response == "no":
+                stop = True
 
     elif valid_choice == "5":
         # TODO: 1. Print each author with it's book and if this book was read
