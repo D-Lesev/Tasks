@@ -34,6 +34,21 @@ def delete_book(book_name):
     with open(_CURRENT_DB, "r") as f:
         cont = json.load(f)
 
+    found_book = False
+    for author, books in cont.items():
+        for book in books:
+            if book_name == book.lower():
+                del cont[author][book]
+                if len(cont[author]) == 0:
+                    del cont[author]
+                found_book = True
+                print("[+] Your book has been deleted")
+                break
+        if found_book:
+            with open(_CURRENT_DB, "w") as f:
+                json.dump(cont, f)
+            break
+
 
 def search_book(book_name):
     with open(_CURRENT_DB, "r") as f:
@@ -107,8 +122,6 @@ def main():
         ...
 
     elif valid_choice == "3":
-        # TODO: 1. Search book by book name
-        #       2. Delete the the book which we choose
         stop = False
         while not stop:
             searched_book = input("What book do you want to delete:\t").lower()
@@ -143,30 +156,5 @@ def main():
         ...
 
 
-def test_f():
-    author_name = input("Enter the name of the author:\n")
-    book_name = input("Enter the name of the book:\n")
-    create_book(author_name, book_name)
-    # try:
-    #     with open("books.json", "r") as f:
-    #         cont = json.load(f)
-    #         return cont
-    # except json.JSONDecodeError:
-    #     print("Empty file")
-    #
-    # cur = {
-    #     "Kevin Lin": {
-    #         "Klipodmv": False,
-    #         "Tesmvnir": True,
-    #         "POldivm": False
-    #     },
-    #     "Polin Lkil": {
-    #         "Iowemv": False,
-    #         "Wcmbtim": True
-    #     }
-    # }
-
-
 if __name__ == "__main__":
     main()
-    # test_f()
