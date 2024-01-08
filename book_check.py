@@ -27,7 +27,28 @@ def create_book(author, book_name, read=False):
 
 
 def edit_book(book_name):
-    ...
+    with open(_CURRENT_DB, "r") as f:
+        cont = json.load(f)
+
+    found_book = False
+    for author, books in cont.items():
+        for book in books:
+            if book_name.lower() == book.lower():
+                found_book = True
+                print("[!] Your book was found.")
+                is_read = cont[author][book]
+                if not is_read:
+                    print("Currently you did not read this book.")
+                    response = input("Do you read this book already? Do you want to make it True? (Yes || No)\n")
+                    if response.lower() == "yes":
+                        cont[author][book] = True
+
+                break
+        if found_book:
+            break
+
+    with open(_CURRENT_DB, "w") as f:
+        json.dump(cont, f)
 
 
 def delete_book(book_name):
@@ -37,7 +58,7 @@ def delete_book(book_name):
     found_book = False
     for author, books in cont.items():
         for book in books:
-            if book_name == book.lower():
+            if book_name.lower() == book.lower():
                 del cont[author][book]
                 if len(cont[author]) == 0:
                     del cont[author]
@@ -57,7 +78,7 @@ def search_book(book_name):
     found_book = False
     for books in content.values():
         for book in books:
-            if book_name == book.lower():
+            if book_name.lower() == book.lower():
                 found_book = True
                 break
         if found_book:
@@ -114,12 +135,16 @@ def main():
                 stop = True
 
     elif valid_choice == "2":
-        # TODO: 1. Search book by book name
-        #           - if we have the same book name -> show all possible authors
-        #       2. To choose with numbers
-        #       3. After choosing the item we need to choose what to edit -> for now only if it was read (Yes/No)
-        #       4. Write the new status to the current book
-        ...
+        stop = False
+        while not stop:
+            book_to_edit = input("Which book do you want to edit?\t")
+            edit_book(book_to_edit)
+
+            print("[!] You change the status of your book!\nDo you want to change another book? (YES || NO)")
+            response = input(">>\t")
+
+            if response.lower() == "no":
+                stop = True
 
     elif valid_choice == "3":
         stop = False
